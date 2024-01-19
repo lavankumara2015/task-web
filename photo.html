@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Upload</title>
+</head>
+<body>
+    <form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return handleFormSubmit()">
+        <label for="photo">Select a photo:</label>
+        <input type="file" id="photo" name="photo" accept="image/*" onchange="previewImage(event)">
+        <img id="preview" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 200px;">
+        <input type="submit" value="Upload">
+    </form>
+
+    <script>
+        function previewImage(event) {
+            var input = event.target;
+            var preview = document.getElementById('preview');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+    function handleFormSubmit() {
+        var input = document.getElementById('photo');
+        
+        if (input.files && input.files[0]) {
+            var image;
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                image = e.target.result;
+
+                console.log(e.target.result);
+
+                localStorage.setItem('uploadedImageDataUrl', image);
+
+                alert('Image uploaded successfully!');
+
+                window.location.href = './userverify.html';
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            alert('Please select a valid image.');
+        }
+        
+        return false;
+    }
+
+    </script>
+</body>
+</html>
